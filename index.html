@@ -3,497 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MVMNTD INC. Pitch Deck</title>
+    <title>MVMNTD INC. Presentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;900&family=Azeret+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 1. CONFIGURAÇÃO GERAL */
+        :root {
+            --primary: #deff9a; /* Verde Neon / Lima */
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: #f5f5f5;
+            --text-dim: #a0a0a0;
+            --accent: #222;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            cursor: default;
         }
 
         body {
-            background-color: #121212;
-            display: grid;
-            gap: 40px;
-            grid-template-columns: 1fr;
-            place-items: center;
-            padding: 40px 0;
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Urbanist', sans-serif;
-        }
-
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            background-color: #000;
-            color: #f5f5f5;
             overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Container de Slides */
+        .presentation-container {
             position: relative;
+            height: 100vh;
+            width: 100vw;
             display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 80px;
+            display: none;
             flex-direction: column;
-            padding: 60px;
-            border-radius: 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            justify-content: center;
+            background-color: var(--bg);
+            transition: opacity 0.5s ease-in-out;
         }
 
-        /* 1.1 ELEMENTOS VISUAIS DE FUNDO (DESIGN) */
-        .slide-container::before {
-            content: '';
-            position: absolute;
-            top: -10%;
-            right: -10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(222, 255, 154, 0.1) 0%, transparent 70%);
-            z-index: 0;
+        .slide.active {
+            display: flex;
+            animation: fadeIn 0.6s ease-out forwards;
         }
 
-        .slide-container::after {
-            content: '';
-            position: absolute;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navegação */
+        .nav-controls {
+            position: fixed;
             bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--surface);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            transform: scale(1.1);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 55px;
             left: 60px;
-            right: 60px;
-            height: 1px;
-            background: rgba(218, 255, 222, 0.2);
-            z-index: 0;
+            font-family: 'Azeret Mono', monospace;
+            color: var(--primary);
+            font-size: 14px;
+            letter-spacing: 2px;
         }
 
-        .slide-container > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 2. TIPOGRAFIA */
+        /* Estilos de Conteúdo */
         h1 {
-            font-size: 80px;
-            line-height: 1.1;
-            font-weight: 700;
+            font-size: clamp(60px, 10vw, 120px);
+            font-weight: 900;
             text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 20px;
         }
 
         h1 span {
-            color: #deff9a;
+            color: var(--primary);
+            -webkit-text-stroke: 1px var(--primary);
+            -webkit-text-fill-color: transparent;
         }
 
-        .slide-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            text-align: left;
-            width: 100%;
+        h2.slide-title {
+            font-size: 64px;
             text-transform: uppercase;
-            letter-spacing: -1px;
+            margin-bottom: 40px;
+            border-left: 8px solid var(--primary);
+            padding-left: 20px;
         }
 
-        .slide-title span {
-            color: #deff9a;
-        }
-
-        p, li, td, th {
-            font-size: 20px;
-            line-height: 1.4;
-            color: #daffde;
+        h2.slide-title span {
+            color: var(--primary);
         }
 
         .subtitle {
             font-size: 24px;
-            color: #daffde;
-            max-width: 800px;
-            margin-top: 20px;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 40px;
         }
 
-        /* 3. LAYOUTS ESPECÍFICOS */
-        .content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .title-layout {
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .section-title-layout {
-            text-align: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .section-title-layout hr {
-            border: none;
-            height: 4px;
-            background: #deff9a;
-            width: 100px;
-            margin: 20px auto;
-        }
-
-        .two-column {
+        .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
-            height: 100%;
         }
 
-        .image-wrapper {
-            width: 100%;
-            height: 450px;
+        .card {
+            background: var(--surface);
+            padding: 40px;
             border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #deff9a;
+            border-bottom: 4px solid var(--primary);
         }
 
-        .image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .two-column.tiled > div {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 24px;
-            border-left: 4px solid #deff9a;
-        }
-
-        .two-column.tiled h3 {
-            color: #deff9a;
+        .card h3 {
             font-size: 28px;
+            color: var(--primary);
             margin-bottom: 15px;
-        }
-
-        /* Tiled Content */
-        .tiled-content {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .tile {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 24px;
-            text-align: center;
-        }
-
-        .tile .icon {
-            font-size: 48px;
-            color: #deff9a;
-            margin-bottom: 20px;
-        }
-
-        /* Highlighted Numbers */
-        .highlight-numbers-layout {
-            display: grid;
-            grid-template-columns: 40% 60%;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .number {
-            font-size: 160px;
-            font-weight: 700;
-            color: #deff9a;
-            line-height: 1;
-        }
-
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #deff9a;
-            color: #000;
-            padding: 20px;
-            text-align: left;
             text-transform: uppercase;
         }
 
-        td {
-            padding: 20px;
-            border-bottom: 1px solid #333;
-        }
-
-        /* Timeline */
-        .timeline-layout {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            padding: 100px 0;
-        }
-
-        .timeline-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #deff9a;
-        }
-
-        .timeline-item {
-            width: 22%;
-            text-align: center;
-            position: relative;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            background: #deff9a;
-            border-radius: 50%;
-        }
-
-        /* New Highlight Style for TikTok Project */
-        .tiktok-highlight {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-            border: 2px solid #deff9a;
-            padding: 40px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 40px;
+        .card p {
+            font-size: 18px;
+            color: var(--text-dim);
+            line-height: 1.5;
         }
 
         ul {
             list-style: none;
         }
 
-        ul li::before {
-            content: '→';
-            color: #deff9a;
-            margin-right: 10px;
-            font-weight: bold;
+        li {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        li i {
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 450px;
+            background: var(--surface);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .stat-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Slide TikTok Específico */
+        .tiktok-badge {
+            background: #ff0050;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-family: 'Azeret Mono', monospace;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: inline-block;
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Slide 1: Título -->
-    <div class="slide-container" id="slide1">
-        <div class="title-layout">
-            <h1>MVMNTD <span>INC.</span></h1>
-            <p class="subtitle">Direto do Rio para a Pista. Música, Performance e Lifestyle Urbano em um Hub de Entretenimento de alta escala.</p>
-        </div>
-    </div>
+    <div class="presentation-container">
+        
+        <!-- SLIDE 1: CAPA -->
+        <section class="slide active">
+            <div style="text-align: left;">
+                <p style="font-family: 'Azeret Mono'; color: var(--primary); margin-bottom: 20px;">// MVMNTD INC. PRESENTS</p>
+                <h1>MOVIMENTANDO <span>O RIO.</span></h1>
+                <p class="subtitle">O Hub de Entretenimento Urbano que une a batida do Trap ao lifestyle da rua.</p>
+                <div style="display: flex; gap: 20px; margin-top: 40px;">
+                    <span style="border: 1px solid var(--text-dim); padding: 8px 20px; border-radius: 30px; font-size: 14px;">RAP / TRAP / FUNK</span>
+                    <span style="border: 1px solid var(--text-dim); padding: 8px 20px; border-radius: 30px; font-size: 14px;">LIFESTYLE & PERFORMANCE</span>
+                </div>
+            </div>
+        </section>
 
-    <!-- Slide 2: O Problema -->
-    <div class="slide-container" id="slide2">
-        <h2 class="slide-title">O <span>Gap</span> do Mercado</h2>
-        <div class="content-area">
-            <div class="two-column">
+        <!-- SLIDE 2: O PROBLEMA -->
+        <section class="slide">
+            <h2 class="slide-title">O <span>Gap</span> do Mercado</h2>
+            <div class="grid-2">
                 <div>
                     <ul>
-                        <li>Obsolescência rápida de áudios sem suporte visual.</li>
-                        <li>Falta de ponte entre o viral do TikTok e a produção profissional.</li>
-                        <li>Artistas com prévias gigantes sem estrutura para finalizar o hit.</li>
-                        <li>Vácuo de curadoria estética no Trap e Funk nacional.</li>
+                        <li><i class="fa-solid fa-bolt-lightning"></i> Obsolescência rápida de lançamentos puramente em áudio.</li>
+                        <li><i class="fa-solid fa-bolt-lightning"></i> Falta de ponte entre o viral do TikTok e a produção profissional.</li>
+                        <li><i class="fa-solid fa-bolt-lightning"></i> Selos tradicionais que não entendem o lifestyle real do público.</li>
                     </ul>
                 </div>
-                <div class="image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1280" alt="Estúdio de gravação profissional">
+                <div class="card">
+                    <h3>Visão MVMNTD</h3>
+                    <p>"A música hoje precisa ser vista para ser ouvida. O fã não quer só o som, ele quer a estética e o movimento."</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Slide 3: PROJETO TIKTOK (NOVO) -->
-    <div class="slide-container" id="slide3">
-        <h2 class="slide-title">DO <span>TIKTOK</span> PRO MUNDO</h2>
-        <div class="content-area">
-            <div class="tiktok-highlight">
-                <div style="flex: 1;">
-                    <h3 style="color: #deff9a; font-size: 32px; margin-bottom: 20px;">A Fábrica de Hits</h3>
-                    <p>Nossa estratégia de aquisição de talentos é baseada em <b>dados e tendências reais</b>.</p>
-                    <br>
-                    <ul>
-                        <li><b>Scouting:</b> Mapeamos as melhores prévias virais do TikTok Brasil.</li>
-                        <li><b>Imersão no Rio:</b> Trazemos o artista para o Estúdio 501.</li>
-                        <li><b>Produção Elite:</b> Transformamos o "snippet" de 15s em um fonograma e vídeo de alta performance.</li>
-                        <li><b>Lançamento Global:</b> Escalamos a audiência já existente na prévia.</li>
-                    </ul>
-                </div>
-                <div style="flex: 0.8; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="tile" style="padding: 20px;">
-                        <i class="fa-brands fa-tiktok" style="font-size: 40px; color: #deff9a;"></i>
-                        <p style="font-size: 16px; margin-top: 10px;">Prévia Viral</p>
-                    </div>
-                    <div class="tile" style="padding: 20px;">
-                        <i class="fa-solid fa-microphone-lines" style="font-size: 40px; color: #deff9a;"></i>
-                        <p style="font-size: 16px; margin-top: 10px;">Vibe do Rio</p>
-                    </div>
-                    <div class="tile" style="padding: 20px;">
-                        <i class="fa-solid fa-clapperboard" style="font-size: 40px; color: #deff9a;"></i>
-                        <p style="font-size: 16px; margin-top: 10px;">Vídeo Premium</p>
-                    </div>
-                    <div class="tile" style="padding: 20px;">
-                        <i class="fa-solid fa-globe" style="font-size: 40px; color: #deff9a;"></i>
-                        <p style="font-size: 16px; margin-top: 10px;">Hit Global</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 4: MVMNTD NO ESTÚDIO -->
-    <div class="slide-container" id="slide4">
-        <h2 class="slide-title">MVMNTD <span>NO ESTÚDIO</span></h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div class="image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1514525253361-bee8718a342b?auto=format&fit=crop&q=80&w=1280" alt="Performance em estúdio">
+        <!-- SLIDE 3: PROJETO TIKTOK -->
+        <section class="slide">
+            <div class="tiktok-badge">ESTRATÉGIA DE CRESCIMENTO</div>
+            <h2 class="slide-title">DO <span>TIKTOK</span> PRO MUNDO</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Scouting Inteligente</h3>
+                    <p>Mapeamos artistas com prévias virais e trazemos a "vibe do Rio" para potencializar o hit.</p>
                 </div>
                 <div>
-                    <h3>O Selo da Qualidade</h3>
-                    <p>Nosso formato de vídeo estilo <i>On The Radar</i> é o diferencial competitivo que atrai os artistas do TikTok.</p>
-                    <br>
                     <ul>
-                        <li>Sony ZV-E10 + DaVinci Resolve: Cinema nas redes.</li>
-                        <li>Agilidade: Gravação e edição em tempo recorde.</li>
-                        <li>Estética Urbana: O Rio como cenário global.</li>
+                        <li><i class="fa-brands fa-tiktok"></i> <b>Dados:</b> Baseado em retenção real.</li>
+                        <li><i class="fa-solid fa-microphone-lines"></i> <b>Imersão:</b> Gravação no Estúdio 501.</li>
+                        <li><i class="fa-solid fa-share-nodes"></i> <b>Escala:</b> Viralização planejada.</li>
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Slide 5: MVMNTD RUN -->
-    <div class="slide-container" id="slide5">
-        <h2 class="slide-title">MVMNTD <span>RUN</span></h2>
-        <div class="content-area">
-            <div class="two-column">
+        <!-- SLIDE 4: PRODUTO -->
+        <section class="slide">
+            <h2 class="slide-title">MVMNTD <span>NO ESTÚDIO</span></h2>
+            <div class="grid-2">
+                <div class="image-placeholder">
+                    <div style="text-align: center;">
+                        <i class="fa-solid fa-video" style="font-size: 50px; color: var(--primary); margin-bottom: 20px;"></i>
+                        <p>PREVIEW VISUAL PESADO</p>
+                    </div>
+                </div>
                 <div>
-                    <h3>Música & Performance</h3>
-                    <p>Transformamos o ouvinte em comunidade. A corrida de rua é o novo símbolo de status do Trap.</p>
+                    <h3>On The Radar Carioca</h3>
+                    <p>Nossas sessões transformam o estúdio em um palco cinematográfico.</p>
                     <br>
-                    <ul>
-                        <li>Clube de corrida próprio.</li>
-                        <li>Parcerias com marcas de Sportswear.</li>
-                        <li>Lifestyle que vai além do fone de ouvido.</li>
+                    <ul style="font-size: 18px;">
+                        <li><i class="fa-solid fa-check"></i> Sony ZV-E10 + DaVinci Resolve.</li>
+                        <li><i class="fa-solid fa-check"></i> Conteúdo nativo para Reels/TikTok.</li>
+                        <li><i class="fa-solid fa-check"></i> Agilidade: Do record ao post em 48h.</li>
                     </ul>
                 </div>
-                <div class="image-wrapper" style="border-radius: 50%; width: 450px; height: 450px;">
-                    <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&q=80&w=1280" alt="Corrida de rua urbana">
-                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Slide 6: Tração -->
-    <div class="slide-container" id="slide6">
-        <h2 class="slide-title">Nossos <span>Números</span></h2>
-        <div class="content-area">
-            <div class="highlight-numbers-layout">
-                <div class="number">50K</div>
+        <!-- SLIDE 5: DIFERENCIAL RUN -->
+        <section class="slide">
+            <h2 class="slide-title">MVMNTD <span>RUN</span></h2>
+            <p class="subtitle">Não somos apenas um selo. Somos o movimento físico.</p>
+            <div class="grid-2">
                 <div>
-                    <h3>Alcance Orgânico</h3>
-                    <p>Validação total do modelo de conteúdo visual.</p>
+                    <p style="font-size: 20px; line-height: 1.6;">A cultura da corrida de rua é o novo símbolo de status. Unimos o Hip Hop à performance esportiva.</p>
+                    <br>
+                    <div class="card" style="border-left: 4px solid #fff; border-bottom: none;">
+                        <p>"Corredores de rua usando MVMNTD e ouvindo nossos lançamentos."</p>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="stat-circle">
+                        <div class="stat-number">1ª</div>
+                        <div class="stat-label">Corrida MVMNTD</div>
+                    </div>
+                    <p style="margin-top: 20px; color: var(--primary);">Oportunidade p/ Nike / Adidas / Energéticos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: TRAÇÃO -->
+        <section class="slide">
+            <h2 class="slide-title">Nossa <span>Voz</span> nas Ruas</h2>
+            <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 40px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 100px; font-weight: 900; color: var(--primary);">50K</div>
+                    <p class="stat-label">Alcance Orgânico</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 100px; font-weight: 900; color: var(--primary);">12K</div>
+                    <p class="stat-label">Curtidas Reais</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 100px; font-weight: 900; color: var(--primary);">7K</div>
+                    <p class="stat-label">Youtube Views</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 60px; color: var(--text-dim);">*Dados baseados em crescimento 100% orgânico.</p>
+        </section>
+
+        <!-- SLIDE 7: BUSINESS -->
+        <section class="slide">
+            <h2 class="slide-title">Modelo de <span>Receita</span></h2>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <div class="card" style="text-align: center;">
+                    <i class="fa-solid fa-compact-disc" style="font-size: 30px; margin-bottom: 15px;"></i>
+                    <p><b>Royalties</b><br>Distribuição Digital</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <i class="fa-solid fa-shirt" style="font-size: 30px; margin-bottom: 15px;"></i>
+                    <p><b>Merch</b><br>Linha Performance</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <i class="fa-solid fa-ticket" style="font-size: 30px; margin-bottom: 15px;"></i>
+                    <p><b>Tickets</b><br>Eventos & Corridas</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <i class="fa-solid fa-handshake" style="font-size: 30px; margin-bottom: 15px;"></i>
+                    <p><b>Brands</b><br>Patrocínios</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: O INVESTIMENTO -->
+        <section class="slide">
+            <h2 class="slide-title">O Próximo <span>Passo</span></h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Onde entra o aporte:</h3>
                     <br>
                     <ul>
-                        <li>12.000 curtidas diretas sem tráfego pago.</li>
-                        <li>7.000 views no YouTube com alta retenção.</li>
-                        <li>Base estabelecida no coração do Rio (Campo Grande).</li>
+                        <li><i class="fa-solid fa-bullhorn"></i> <b>Marketing:</b> Tráfego pago focado em escala.</li>
+                        <li><i class="fa-solid fa-person-running"></i> <b>MVMNTD Run:</b> Lançamento da 1ª edição.</li>
+                        <li><i class="fa-solid fa-industry"></i> <b>Fábrica de Hits:</b> Escalar scouting TikTok.</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 7: Monetização -->
-    <div class="slide-container" id="slide7">
-        <h2 class="slide-title">Revenue <span>Streams</span></h2>
-        <div class="content-area">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ativo</th>
-                        <th>Fonte</th>
-                        <th>Potencial</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Catálogo Digital</td>
-                        <td>Direitos Fonográficos</td>
-                        <td>Equity de Longo Prazo</td>
-                    </tr>
-                    <tr>
-                        <td>Audiovisual</td>
-                        <td>Produção para Artistas</td>
-                        <td>Fluxo de Caixa Mensal</td>
-                    </tr>
-                    <tr>
-                        <td>MVMNTD RUN</td>
-                        <td>Tickets e Merch</td>
-                        <td>Receita de Comunidade</td>
-                    </tr>
-                    <tr>
-                        <td>Sponsorship</td>
-                        <td>Parcerias de Marcas</td>
-                        <td>Escalabilidade B2B</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Slide 8: Roadmap -->
-    <div class="slide-container" id="slide8">
-        <h2 class="slide-title">Plano de <span>Expansão</span></h2>
-        <div class="content-area">
-            <div class="timeline-layout">
-                <div class="timeline-line"></div>
-                <div class="timeline-item">
-                    <h3>Fase 1</h3>
-                    <p>Intensificação do Scouting TikTok e Marketing Digital.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Fase 2</h3>
-                    <p>Lançamento da 1ª Corrida MVMNTD oficial no Rio.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Fase 3</h3>
-                    <p>Upgrade da estrutura para produção simultânea.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Fase 4</h3>
-                    <p>Consolidação como Selo Referência em Lifestyle Urbano.</p>
+                <div class="card" style="background: var(--primary); color: var(--bg);">
+                    <h3 style="color: var(--bg);">Visão 2026</h3>
+                    <p style="color: var(--bg); font-weight: bold;">"Ser a principal vitrine de música urbana e lifestyle esportivo do Rio de Janeiro."</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Slide 9: Encerramento -->
-    <div class="slide-container" id="slide9">
-        <div class="title-layout">
-            <h1>O MOVIMENTO <span>NÃO PARA.</span></h1>
-            <p class="subtitle">MVMNTD INC. | Franco Trapboy</p>
-            <br>
-            <div style="font-family: monospace; color: #deff9a; letter-spacing: 2px;">
-                @MVMNTD.INC | CONTATO@MVMNTD.COM.BR
+        <!-- SLIDE 9: CONTATO -->
+        <section class="slide">
+            <div style="text-align: center;">
+                <p style="color: var(--primary); font-family: 'Azeret Mono'; margin-bottom: 20px;">// CONTACT US</p>
+                <h1 style="font-size: 80px;">BORA <span>CORRER?</span></h1>
+                <p class="subtitle" style="margin: 0 auto 40px;">MVMNTD INC. | Franco Trapboy</p>
+                <div style="display: flex; justify-content: center; gap: 40px; font-family: 'Azeret Mono';">
+                    <span>@MVMNTD.INC</span>
+                    <span>MVMNTD.COM.BR</span>
+                </div>
             </div>
+        </section>
+
+        <!-- CONTROLES -->
+        <div class="slide-number" id="slideNum">01 / 09</div>
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="changeSlide(-1)"><i class="fa-solid fa-arrow-left"></i></button>
+            <button class="nav-btn" onclick="changeSlide(1)"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
+
     </div>
 
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slideNumDisplay = document.getElementById('slideNum');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            slideNumDisplay.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            updateSlide();
+        }
+
+        // Navegação por teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+    </script>
 </body>
 </html>
